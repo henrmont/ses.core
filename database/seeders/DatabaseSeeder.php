@@ -37,6 +37,14 @@ class DatabaseSeeder extends Seeder
             'password' => Hash::make('12345678'),
         ]);
 
+        User::create([
+            'name' => 'User',
+            'email' => 'user@teste.com',
+            'is_valid' => true,
+            'email_verified_at' => now(),
+            'password' => Hash::make('12345678'),
+        ]);
+
         $this->call([
             ModuleSeeder::class,
             ChatSeeder::class,

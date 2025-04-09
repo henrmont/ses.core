@@ -26,6 +26,25 @@ class ChatController extends Controller
         return response()->json($chat, 200);
     }
 
+    public function registerChat($id)
+    {
+        $chat = Chat::with(['person_one','person_two'])->where(function($query) {
+            $query->where('person_one', auth()->user()->id)->orWhere('person_two', auth()->user()->id);
+        })->where(function($query) use ($id) {
+            $query->where('person_one', $id)->orWhere('person_two', $id);
+        })->first();
+        return response()->json($chat, 200);
+        $chat = Chat::create([
+            'person_one' => auth()->user()->id,
+            'person_two' => $id,
+        ]);
+        ChatMessage::create([
+            'chat_id' => $chat->id,
+            'user_id' => auth()->user()->id,
+            'message' => 'Hello',
+        ]);
+    }
+
     public function registerMessage(Request $request)
     {
         $message = ChatMessage::create([
@@ -54,10 +73,10 @@ class ChatController extends Controller
 
     public function getUserChat($id)
     {
-        $chat = Chat::with(['person_one','person_two','messages.user'])->whereHas('person_one', function($query) use ($id) {
-            $query->where('id', $id)->orWhere('id', auth()->user()->id);
-        })->whereHas('person_two', function($query) use ($id) {
-            $query->where('id', $id)->orWhere('id', auth()->user()->id);
+        $chat = Chat::with(['person_one','person_two'])->where(function($query) {
+            $query->where('person_one', auth()->user()->id)->orWhere('person_two', auth()->user()->id);
+        })->where(function($query) use ($id) {
+            $query->where('person_one', $id)->orWhere('person_two', $id);
         })->first();
         if (!$chat) {
             $chat = Chat::create([
@@ -67,9 +86,9 @@ class ChatController extends Controller
             ChatMessage::create([
                 'chat_id' => $chat->id,
                 'user_id' => auth()->user()->id,
-                'message' => 'Hello',
+                'message' => 'Olá',
             ]);
         }
-        return response()->json($chat, 200);
+        return response()->json($chat->load(['person_one','person_two','messages.user']), 200);
     }
 }
