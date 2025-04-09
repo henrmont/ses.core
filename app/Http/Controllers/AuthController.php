@@ -2,9 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Mail\CreateUserMail;
 use App\Mail\VerificationCodeMail;
-use App\Mail\VerificationMail;
 use App\Models\User;
 use App\Models\VerificationCode;
 use Illuminate\Http\Request;

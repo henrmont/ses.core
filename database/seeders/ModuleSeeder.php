@@ -22,7 +22,7 @@ class ModuleSeeder extends Seeder
 
         Module::create([
             'name' => 'sisppi',
-            'url' => 'http://localhost:7000',
+            'url' => 'http://localhost:10000',
             'icon' => 'wallet-outline'
         ]);
 
