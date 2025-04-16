@@ -3,6 +3,7 @@
 use App\Http\Controllers\ArticleController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ChatController;
+use App\Http\Controllers\CountyController;
 use App\Http\Controllers\ModuleController;
 use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\ProfileController;
@@ -85,5 +86,11 @@ Route::group(['middleware' => 'api', 'prefix' => 'profile'], function ($router) 
 Route::group(['middleware' => 'api', 'prefix' => 'article'], function ($router) {
 
     Route::get('get/articles', [ArticleController::class, 'getArticles']);
+
+});
+
+Route::group(['middleware' => 'api', 'prefix' => 'county'], function ($router) {
+
+    Route::get('get/counties', [CountyController::class, 'getCounties']);
 
 });

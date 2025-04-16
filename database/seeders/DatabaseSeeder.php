@@ -49,6 +49,7 @@ class DatabaseSeeder extends Seeder
             ModuleSeeder::class,
             ChatSeeder::class,
             ArticleSeeder::class,
+            CountySeeder::class,
             // UserSeeder::class,
         ]);
     }
