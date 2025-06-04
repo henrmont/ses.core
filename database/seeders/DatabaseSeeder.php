@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\ModuleUser;
 use App\Models\User;
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
@@ -17,7 +18,8 @@ class DatabaseSeeder extends Seeder
     public function run(): void
     {
         $this->call([
-            RolesAndPermissionsSeeder::class,
+            SesadmSeeder::class,
+            SistfdSeeder::class,
         ]);
 
         $roleAdmin = Role::findByName('sesadm/sesadm');
@@ -29,6 +31,11 @@ class DatabaseSeeder extends Seeder
             'password' => Hash::make('12345678'),
         ])->assignRole($roleAdmin);
 
+        ModuleUser::create([
+            'user_id' => 1,
+            'module_id' => 1
+        ]);
+
         User::create([
             'name' => 'Tester',
             'email' => 'teste@teste.com',
@@ -37,20 +44,10 @@ class DatabaseSeeder extends Seeder
             'password' => Hash::make('12345678'),
         ]);
 
-        User::create([
-            'name' => 'User',
-            'email' => 'user@teste.com',
-            'is_valid' => true,
-            'email_verified_at' => now(),
-            'password' => Hash::make('12345678'),
-        ]);
-
         $this->call([
-            ModuleSeeder::class,
             ChatSeeder::class,
             ArticleSeeder::class,
             CountySeeder::class,
-            // UserSeeder::class,
         ]);
     }
 }

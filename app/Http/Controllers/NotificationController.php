@@ -19,4 +19,10 @@ class NotificationController extends Controller
         $notification = $user->notifications()->where('id', $id)->first();
         $notification->delete();
     }
+
+    public function getFlashNotifications()
+    {
+        $user = User::find(auth()->user()->id);
+        return response()->json($user->notifications->take(5), 200);
+    }
 }

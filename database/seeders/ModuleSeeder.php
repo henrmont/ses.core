@@ -38,6 +38,11 @@ class ModuleSeeder extends Seeder
         ]);
 
         ModuleUser::create([
+            'user_id' => 1,
+            'module_id' => 3
+        ]);
+
+        ModuleUser::create([
             'user_id' => 2,
             'module_id' => 2
         ]);

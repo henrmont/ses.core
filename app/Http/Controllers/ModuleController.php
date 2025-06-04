@@ -14,6 +14,12 @@ class ModuleController extends Controller
         return response()->json($modules);
     }
 
+    public function getUserModule($id)
+    {
+        $module = Module::find($id);
+        return response()->json($module);
+    }
+
     public function getUserModules()
     {
         $modules = ModuleUser::with(['module'])->where('user_id',auth()->user()->id)->get();

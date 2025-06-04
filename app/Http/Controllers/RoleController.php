@@ -14,23 +14,23 @@ class RoleController extends Controller
 
     public function getRoles($module)
     {
-        $this->authorize('sesadm/regra listar');
+        $this->authorize($module.'/regra listar');
         $roles = Role::with('permissions')->where('name','LIKE',"%".$module."%")->get();
         return response()->json($roles, 200);
     }
 
-    public function createRole(Request $request)
+    public function createRole(Request $request, $module)
     {
-        $this->authorize('sesadm/regra criar');
+        $this->authorize($module.'/regra criar');
         Role::create([
             'name' => $request->name
         ]);
         return response()->json(['message' => 'Regra criada com sucesso.'], 200);
     }
 
-    public function updateRole(Request $request)
+    public function updateRole(Request $request, $module)
     {
-        $this->authorize('sesadm/regra editar');
+        $this->authorize($module.'/regra editar');
         $role = Role::find($request->id);
         $role->update([
             'name' => $request->name
@@ -38,9 +38,9 @@ class RoleController extends Controller
         return response()->json(['message' => 'Regra editada com sucesso.'], 200);
     }
 
-    public function deleteRole($id)
+    public function deleteRole($module, $id)
     {
-        $this->authorize('sesadm/regra apagar');
+        $this->authorize($module.'/regra apagar');
         $role = Role::find($id);
         $role->delete();
         return response()->json(['message' => 'Regra apagada com sucesso.'], 200);
@@ -48,14 +48,14 @@ class RoleController extends Controller
 
     public function getPermissions($module)
     {
-        $this->authorize('sesadm/regra listar');
+        $this->authorize($module.'/regra listar');
         $permissions = Permission::with('roles')->where('name','LIKE',"%".$module."%")->get();
         return response()->json($permissions, 200);
     }
 
-    public function changePermissionToRole($permission_id, $role_id)
+    public function changePermissionToRole($module, $permission_id, $role_id)
     {
-        $this->authorize('sesadm/regra editar');
+        $this->authorize($module.'/regra editar');
         $permission = Permission::find($permission_id);
         $role = Role::find($role_id);
         if ($role->hasPermissionTo($permission)) {
@@ -65,9 +65,9 @@ class RoleController extends Controller
         }
     }
 
-    public function changeRoleToUser($role_id, $user_id)
+    public function changeRoleToUser($module, $role_id, $user_id)
     {
-        $this->authorize('sesadm/regra editar');
+        $this->authorize($module.'/regra editar');
         $user = User::find($user_id);
         $role = Role::find($role_id);
         if ($user->hasRole($role)) {

@@ -3,9 +3,13 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class County extends Model
 {
+    use SoftDeletes;
+
     protected $fillable = [
         'ibge_code',
         'name',
@@ -20,7 +24,7 @@ class County extends Model
         'img_map'
     ];
 
-    public function health_region()
+    public function health_region(): BelongsTo
     {
         return $this->belongsTo(HealthRegion::class);
     }

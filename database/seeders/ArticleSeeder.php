@@ -18,6 +18,7 @@ class ArticleSeeder extends Seeder
                 'title' => fake()->name(),
                 'subtitle' => fake()->paragraph(2),
                 'content' => fake()->text(1000),
+                'publish_at' => now()
            ]);
         }
     }

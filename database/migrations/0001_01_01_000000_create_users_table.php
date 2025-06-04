@@ -19,6 +19,7 @@ return new class extends Migration
             $table->string('password');
             $table->boolean('is_valid')->default(true);
             $table->text('picture')->nullable();
+            $table->integer('module_id')->nullable();
             $table->rememberToken();
             $table->softDeletes();
             $table->timestamps();

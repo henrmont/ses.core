@@ -21,5 +21,6 @@ class ProfileController extends Controller
         $profile->update([
             'picture' => $request->picture,
         ]);
+        return response()->json(['message' => 'Imagem alterada com sucesso.'], 200);
     }
 }

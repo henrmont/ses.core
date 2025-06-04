@@ -13,19 +13,10 @@ use PHPOpenSourceSaver\JWTAuth\Facades\JWTAuth;
 
 class AuthController extends Controller
 {
-    public function create(Request $request)
+    public function getUser($id)
     {
-        $user = User::where('email',$request->email)->first();
-        if ($user) {
-            return response()->json(['message' => 'Email já está em uso.'], 400);
-        } else {
-            $user = User::create([
-                'name' => $request->name,
-                'email' => $request->email,
-                'password' => Hash::make(md5(now())),
-            ]);
-            return response()->json(['message' => 'Usuário cadastrado com sucesso.'], 200);
-        }
+        $user = User::with(['verificationCode'])->find($id);
+        return response()->json($user, 200);
     }
 
     public function sendVerificationCode(Request $request)
@@ -45,7 +36,7 @@ class AuthController extends Controller
                 'subject' => 'Código de verificação',
                 'expire' => $code->expire_at
             ]));
-            return response()->json(['message' => 'Código de verificação enviado!'], 200);
+            return response()->json(['message' => 'Código de verificação enviado!', 'id' => $user->id], 200);
         } else {
             return response()->json(['message' => 'E-mail não encontrado!'], 400);
         }
@@ -53,14 +44,13 @@ class AuthController extends Controller
 
     public function checkVerificationCode(Request $request)
     {
-        $user = User::with(['verificationCode'])->where('email', $request->email)->first();
+        $user = User::with(['verificationCode'])->find($request->id);
         $verificationCode = $request->one.$request->two.$request->three.$request->four;
         if ($user->verificationCode->code == $verificationCode) {
             if ($user->verificationCode->expire_at > now()) {
                 $user->update([
                     'email_verified_at' => now()
                 ]);
-                $user->verificationCode->delete();
             } else {
                 return response()->json(['message' => 'Código de verificação expirou!'], 400);
             }
@@ -69,25 +59,13 @@ class AuthController extends Controller
         }
     }
 
-    // public function recover(Request $request)
-    // {
-    //     $user = User::with(['verificationCode'])->where('email', $request->email)->first();
-    //     $verification = $request->one.$request->two.$request->three.$request->four;
-    //     if ($user->verificationCode->code == $verification) {
-    //         if ($user->verificationCode->expire_at < now()) {
-    //             return response()->json(['message' => 'Código de verificação expirou!'], 400);
-    //         }
-    //     } else {
-    //         return response()->json(['message' => 'Código de verificação inválido!'], 400);
-    //     }
-    // }
-
     public function resetPassword(Request $request)
     {
-        $user = User::where('email', $request->email)->first();
+        $user = User::with(['verificationCode'])->find($request->id);
         $user->update([
             'password' => Hash::make($request->npassword),
         ]);
+        $user->verificationCode->delete();
         return response()->json(['message' => 'Senha reedefinida com sucesso!'], 200);
     }
 
@@ -106,7 +84,7 @@ class AuthController extends Controller
     {
         try {
             $user = JWTAuth::parseToken()->authenticate();
-            return response()->json($user->load(['roles','permissions','modules.module']));
+            return response()->json($user->load(['roles.permissions','permissions','modules','module']));
         } catch (TokenExpiredException $e) {
             return response()->json(['error' => 'token_expired'], 401);
         }

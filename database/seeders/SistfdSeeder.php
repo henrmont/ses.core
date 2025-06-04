@@ -2,31 +2,32 @@
 
 namespace Database\Seeders;
 
+use App\Models\Module;
+use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 use Spatie\Permission\Models\Permission;
 use Spatie\Permission\Models\Role;
 
-class RolesAndPermissionsSeeder extends Seeder
+class SistfdSeeder extends Seeder
 {
     /**
      * Run the database seeds.
      */
     public function run(): void
     {
-
         try {
             DB::beginTransaction();
 
             $permissions = [
-                'sesadm/usuário listar',
-                'sesadm/usuário criar',
-                'sesadm/usuário editar',
-                'sesadm/usuário apagar',
-                'sesadm/regra listar',
-                'sesadm/regra criar',
-                'sesadm/regra editar',
-                'sesadm/regra apagar',
+                'sistfd/usuário listar',
+                'sistfd/usuário criar',
+                'sistfd/usuário editar',
+                'sistfd/usuário apagar',
+                'sistfd/regra listar',
+                'sistfd/regra criar',
+                'sistfd/regra editar',
+                'sistfd/regra apagar',
             ];
 
             foreach($permissions as $vlr) {
@@ -39,9 +40,7 @@ class RolesAndPermissionsSeeder extends Seeder
             }
 
             $roles = [
-                'sesadm/sesadm',
                 'sesadm/sistfd',
-                'sesadm/sisppi',
             ];
 
             foreach($roles as $vlr) {
@@ -52,10 +51,15 @@ class RolesAndPermissionsSeeder extends Seeder
                 ])->syncPermissions($permissions);
             }
 
+            Module::create([
+                'name' => 'sistfd',
+                'url' => 'http://localhost:9000',
+                'icon' => 'airplane-outline'
+            ]);
+
             DB::commit();
         } catch(\Exception $e) {
             DB::rollBack();
         }
-
     }
 }

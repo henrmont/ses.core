@@ -13,6 +13,11 @@ class Article extends Model
         'title',
         'subtitle',
         'content',
+        'publish_at'
+    ];
+
+    protected $casts = [
+        'publish_at' => 'datetime'
     ];
 
 }

@@ -4,6 +4,8 @@ namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -28,6 +30,7 @@ class User extends Authenticatable implements JWTSubject
         'password',
         'is_valid',
         'picture',
+        'module_id',
     ];
 
     /**
@@ -84,8 +87,16 @@ class User extends Authenticatable implements JWTSubject
     /**
      * Get the modules associated with the user.
      */
-    public function modules(): HasMany
+    public function modules(): BelongsToMany
     {
-        return $this->hasMany(ModuleUser::class);
+        return $this->belongsToMany(Module::class, 'module_users');
+    }
+
+    /**
+     * Get the verification code associated with the user.
+     */
+    public function module(): BelongsTo
+    {
+        return $this->belongsTo(Module::class);
     }
 }
