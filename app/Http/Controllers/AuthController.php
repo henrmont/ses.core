@@ -21,7 +21,7 @@ class AuthController extends Controller
 
     public function sendVerificationCode(Request $request)
     {
-        $user = User::with(['verificationCode'])->where('email', $request->email)->first();
+        $user = User::with(['verificationCode'])->where('email', $request->email)->orWhere('id', $request->id)->first();
         if ($user) {
             if ($user->verificationCode) {
                 $user->verificationCode->delete();

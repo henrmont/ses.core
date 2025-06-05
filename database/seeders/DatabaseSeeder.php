@@ -20,6 +20,7 @@ class DatabaseSeeder extends Seeder
         $this->call([
             SesadmSeeder::class,
             SistfdSeeder::class,
+            SisppiSeeder::class,
         ]);
 
         $roleAdmin = Role::findByName('sesadm/sesadm');

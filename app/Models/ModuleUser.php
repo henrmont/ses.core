@@ -8,8 +8,6 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class ModuleUser extends Model
 {
-    use SoftDeletes;
-
     protected $fillable = [
         'user_id',
         'module_id',

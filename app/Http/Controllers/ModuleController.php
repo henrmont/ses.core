@@ -28,20 +28,15 @@ class ModuleController extends Controller
 
     public function changeUserModule($module_id, $user_id)
     {
-        $module = ModuleUser::where('module_id', $module_id)->where('user_id', $user_id);
-        if ($module->first()) {
+        $module = ModuleUser::where('module_id', $module_id)->where('user_id', $user_id)->first();
+        if ($module) {
             $module->delete();
             return response()->json('Module removed');
         } else {
-
-            if ($module->withTrashed()->first()) {
-                $module->restore();
-            } else {
-                ModuleUser::create([
-                    'user_id' => $user_id,
-                    'module_id' => $module_id
-                ]);
-            }
+            ModuleUser::create([
+                'user_id' => $user_id,
+                'module_id' => $module_id
+            ]);
             return response()->json('Module added');
         }
     }

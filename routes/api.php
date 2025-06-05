@@ -108,6 +108,6 @@ Route::group(['middleware' => 'api', 'prefix' => 'sigtap'], function ($router) {
 
 Route::group(['middleware' => 'api', 'prefix' => 'county'], function ($router) {
 
-    Route::get('get/counties/{module}', [CountyController::class, 'getCounties']);
+    Route::get('get/counties', [CountyController::class, 'getCounties']);
 
 });

@@ -10,9 +10,9 @@ class CountyController extends Controller
 {
     use AuthorizesRequests;
 
-    public function getCounties($module)
+    public function getCounties()
     {
-        $this->authorize($module.'/município listar');
+        $this->authorize('sesadm/município listar');
         $counties = County::with(['health_region'])->get();
         return response()->json($counties);
     }
